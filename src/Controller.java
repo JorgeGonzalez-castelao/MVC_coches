@@ -1,21 +1,45 @@
-import java.lang.module.ModuleDescriptor;
-
 public class Controller {
+    static Model miModelo = new Model();
+    static View miVista = new View();
+
     public static void main(String[] args) {
+        UI.crearVentana();
+        ObsExceso miObserver = new ObsExceso();
+        miModelo.addObserver(miObserver);
 
-        // Crear tres coches
+    }
 
-        Model.crearCoche("LaFerrari", "SBC 1234");
-        Model.crearCoche("Alpine", "HYU 4567");
-        Model.crearCoche("Aston Martin", "FGH 3333");
+    /**
+     * Método para crear coche
+     */
+    public static void crearCoche(String modelo, String matricula){
+        Coche aux = miModelo.crearCoche(modelo,matricula);
+        if(aux!=null){
+            miVista.muestraVelocidad(aux.matricula, aux.velocidad);
+        }
+    }
 
-        Coche ferrari = Model.getCoche("SBC 1234");
-        // modifica la velocidad
-        Model.cambiarVelocidad("SBC 1234", 30);
+    /**
+     * Método para incrementar la velocidad
+     */
+    public static void aumentarVelocidad(String matricula){
+        miModelo.subirVelocidad(matricula);
+    }
 
-        // recoje la velocidad y la muestra (tarea de la View)
-        boolean hecho = View.muestraVelocidad("SBC 1234", Model.getVelocidad("SBC 1234"));
 
-        System.out.println(hecho);
+    /**
+     * Método para disminuir la velocidad
+     */
+    public static void bajarVelocidad(String matricula){
+        miModelo.bajarVelocidad(matricula);
+    }
+
+    /**
+     * Método para buscar un coche
+     * en caso de no encontrarse que lo indique
+     */
+    public static void buscarCoche(String matricula){
+        Coche aux = miModelo.getCoche(matricula);
+        miVista.muestraCoche(aux, matricula);
     }
 }
